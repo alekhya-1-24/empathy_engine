@@ -8,8 +8,6 @@ A Flask web service that detects the emotion in input text and synthesizes speec
 - **7 Granular Emotions** : joy, surprise, anger, fear, neutral, disgust, sadness — powered by a fine-tuned transformer model
 - **Intensity Scaling** : the model's confidence score scales how strongly the voice modulates — weak emotion = subtle change, strong emotion = dramatic change
 - **Web Interface**: paste text, click Generate, see emotion + vocal parameters + play audio in-browser
-- **Fully offline TTS** with macOS `say` fallback to `gTTS`
-
 
 ## Tech Stack
 
