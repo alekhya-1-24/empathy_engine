@@ -1,12 +1,12 @@
 # Empathy Engine: Giving AI a Human Voice
 
-A Flask web service that detects the emotion in input text and synthesizes speech with vocal parameters — rate, volume, and pitch — dynamically modulated to match that emotion. The result is expressive, human-like audio output that goes beyond monotonic TTS delivery.
+A Flask web service that detects the emotion in input text and synthesizes speech with vocal parameters - rate, volume, and pitch dynamically modulated to match that emotion. The result is expressive, human-like audio output that goes beyond monotonic TTS delivery.
 
 
 ## Features
 
-- **7 Granular Emotions** : joy, surprise, anger, fear, neutral, disgust, sadness — powered by a fine-tuned transformer model
-- **Intensity Scaling** : the model's confidence score scales how strongly the voice modulates — weak emotion = subtle change, strong emotion = dramatic change
+- **7 Granular Emotions** : joy, surprise, anger, fear, neutral, disgust, sadness - powered by a fine-tuned transformer model
+- **Intensity Scaling** : the model's confidence score scales how strongly the voice modulates
 - **Web Interface**: paste text, click Generate, see emotion + vocal parameters + play audio in-browser
 
 ## Tech Stack
@@ -15,7 +15,7 @@ A Flask web service that detects the emotion in input text and synthesizes speec
 |---|---|
 | Emotion Detection | `j-hartmann/emotion-english-distilroberta-base` (HuggingFace Transformers) |
 | Text-to-Speech | macOS `say` command (primary) / `gTTS` (fallback) |
-| Web Framework | Flask + Jinja2 |
+| Web Framework | Flask|
 
 
 ## Project Structure
@@ -141,7 +141,7 @@ The `0.75` anchor means that at 75% confidence the output stays close to the bas
 | "This is great!" | joy @ 0.80 | +0.10 | Moderate increase |
 | "This is the best news ever!!" | joy @ 0.95 | +0.40 | Significant rate and pitch increase |
 
-This directly satisfies the intensity scaling bonus requirement — the same emotion produces a noticeably different voice depending on how strongly the text expresses it.
+This directly satisfies the intensity scaling bonus requirement - the same emotion produces a noticeably different voice depending on how strongly the text expresses it.
 
 ### Voice Selection (Pitch)
 
