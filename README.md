@@ -155,9 +155,7 @@ Since `pyttsx3` has limited cross-platform pitch control, the service uses the m
 | Mid | Alex, Daniel, Tom |
 | Low (pitch ≤ −5) | Fred, Ralph, Bruce |
 
-On non-macOS systems, `gTTS` is used as a fallback (rate modulation applied via slow/normal flag).
 
----
 
 ## API
 
@@ -182,4 +180,3 @@ torch
 gtts
 ```
 
-> macOS users get the best experience as the `say` command supports named voices and fine-grained rate control. On other platforms, `gTTS` handles synthesis automatically.
