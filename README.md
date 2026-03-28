@@ -2,6 +2,8 @@
 
 A Flask web service that detects the emotion in input text and synthesizes speech with vocal parameters - rate, volume, and pitch dynamically modulated to match that emotion. The result is expressive, human-like audio output that goes beyond monotonic TTS delivery.
 
+## Web Preview
+<img width="1440" height="808" alt="Screenshot 2026-03-28 at 13 30 11" src="https://github.com/user-attachments/assets/c01940d4-3909-4641-b874-764e420c2b6f" />
 
 ## Features
 
