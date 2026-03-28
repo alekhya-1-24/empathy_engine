@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Empathy Engine</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #f5f0f2;
+      min-height: 100vh;
+      padding: 32px 20px;
+    }
+    .page { max-width: 660px; margin: 0 auto; }
+
+    .header { text-align: center; margin-bottom: 32px; }
+    .header h1 { font-size: 28px; font-weight: 500; color: #2c2c2a; margin-bottom: 6px; }
+    .header p  { font-size: 14px; color: #888780; }
+    .dot {
+      display: inline-block; width: 9px; height: 9px;
+      border-radius: 50%; background: #d4537e; margin-right: 8px;
+      vertical-align: middle;
+    }
+
+    .card {
+      background: white; border-radius: 16px;
+      border: 0.5px solid #e8dde3;
+      padding: 28px; margin-bottom: 20px;
+    }
+
+    textarea {
+      width: 100%; height: 110px; padding: 14px;
+      border: 1px solid #e8dde3; border-radius: 10px;
+      font-size: 15px; font-family: inherit; resize: vertical;
+      color: #2c2c2a; background: #fdf8fa; outline: none;
+    }
+    textarea:focus { border-color: #d4537e; background: #fff; }
+
+    .btn {
+      margin-top: 14px; width: 100%; padding: 13px;
+      background: #d4537e; color: white; border: none;
+      border-radius: 10px; font-size: 15px; font-weight: 500;
+      cursor: pointer; letter-spacing: 0.3px; transition: background 0.2s;
+    }
+    .btn:hover { background: #993556; }
+
+    .result-card {
+      background: #fdf8fa; border-radius: 14px;
+      border: 1px solid #f4c0d1; padding: 24px;
+    }
+
+    .badge {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 5px 16px; background: #fbeaf0;
+      border: 1px solid #f4c0d1; color: #993556;
+      border-radius: 20px; font-weight: 500;
+      font-size: 14px; margin-bottom: 14px;
+    }
+    .badge-dot { width: 7px; height: 7px; border-radius: 50%; background: #d4537e; }
+
+    .style-note { font-size: 13px; color: #888780; margin-bottom: 20px; }
+    .style-note b { color: #5f5e5a; }
+
+    .params-grid {
+      display: grid; grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px; margin-bottom: 18px;
+    }
+    .param-box {
+      background: white; border: 1px solid #e8dde3;
+      border-radius: 12px; padding: 14px 10px; text-align: center;
+    }
+    .param-label {
+      font-size: 10px; color: #b4b2a9;
+      text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px;
+    }
+    .param-value { font-size: 22px; font-weight: 500; color: #d4537e; }
+    .param-unit  { font-size: 11px; color: #b4b2a9; margin: 2px 0 8px; }
+    .bar-wrap    { background: #f5f0f2; border-radius: 4px; height: 5px; }
+    .bar-fill    { height: 5px; border-radius: 4px; background: #d4537e; }
+
+    .audio-wrap {
+      background: white; border-radius: 10px;
+      border: 1px solid #e8dde3; padding: 14px; margin-bottom: 18px;
+    }
+    .audio-label { font-size: 12px; color: #b4b2a9; margin-bottom: 8px; }
+    audio { width: 100%; }
+
+    .no-audio { color: #993556; font-size: 13px; padding: 10px 0; }
+
+    .table-title {
+      font-size: 11px; font-weight: 500; color: #5f5e5a;
+      text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 10px;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th {
+      background: #fbeaf0; color: #993556; padding: 8px 10px;
+      text-align: left; font-weight: 500;
+      font-size: 11px; text-transform: uppercase; letter-spacing: 0.6px;
+    }
+    th:first-child { border-radius: 8px 0 0 0; }
+    th:last-child  { border-radius: 0 8px 0 0; }
+    td { padding: 7px 10px; border-bottom: 0.5px solid #f5f0f2; color: #5f5e5a; }
+    tr.highlight td { background: #fbeaf0; color: #72243e; font-weight: 500; }
+    tr:last-child td { border-bottom: none; }
+
+    .error { color: #993556; font-size: 14px; margin-top: 12px; }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <div class="header">
+    <h1><span class=""></span>Empathy Engine: Giving AI a Human
+      Voice </h1>
+    <p>Detects emotion and modulates rate, volume & pitch to speak expressively</p>
+  </div>
+
+  <div class="card">
+    <form method="POST" action="/synthesize">
+      <textarea name="text"
+        placeholder="Type something...&#10;e.g. I just got promoted, this is the best day ever!">{{ text or '' }}</textarea>
+      <button class="btn" type="submit">Generate Expressive Speech</button>
+    </form>
+    {% if error %}<p class="error">{{ error }}</p>{% endif %}
+  </div>
+
+  {% if result %}
+  <div class="result-card">
+
+    <div class="badge">
+      {{ result.emoji }} {{ result.emotion | upper }}
+    </div>
+
+    <p class="style-note">
+      Style: <b>{{ result.note }}</b> &nbsp;|&nbsp; Confidence: <b>{{ result.intensity }}</b>
+    </p>
+
+    <div class="params-grid">
+
+      <div class="param-box">
+        <div class="param-label">Rate</div>
+        <div class="param-value">{{ result.rate }}</div>
+        <div class="param-unit">words / min</div>
+        <div class="bar-wrap">
+          <div class="bar-fill" style="width:{{ [((result.rate - 80) / 170 * 100)|int, 100]|min }}%"></div>
+        </div>
+      </div>
+
+      <div class="param-box">
+        <div class="param-label">Volume</div>
+        <div class="param-value">{{ result.volume }}%</div>
+        <div class="param-unit">amplitude</div>
+        <div class="bar-wrap">
+          <div class="bar-fill" style="width:{{ result.volume }}%"></div>
+        </div>
+      </div>
+
+      <div class="param-box">
+        <div class="param-label">Pitch</div>
+        <div class="param-value">{{ result.pitch }}</div>
+        <div class="param-unit">semitones</div>
+        <div class="bar-wrap">
+          <div class="bar-fill" style="width:{{ (((result.pitch + 50) / 100) * 100)|int }}%"></div>
+        </div>
+      </div>
+
+    </div>
+
+    {% if result.audio_file %}
+    <div class="audio-wrap">
+      <div class="audio-label">Generated audio</div>
+      <audio controls autoplay>
+        <source src="/static/{{ result.audio_file }}" type="{{ result.audio_type }}">
+      </audio>
+    </div>
+    {% else %}
+    <p class="no-audio">Audio generation failed — check terminal for details.</p>
+    {% endif %}
+
+  </div>
+  {% endif %}
+
+</div>
+</body>
+</html>
